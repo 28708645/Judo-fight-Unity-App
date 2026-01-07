@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using System;
-using Unity.Mathematics;
 
 /// <summary>
 /// 
@@ -14,6 +13,8 @@ public class ValueModule : MonoBehaviour
     string m_valueName;
     [SerializeField]
     int m_value;
+    [SerializeField]
+    int m_maxValue;
 
     [Header("UI references")]
     [SerializeField]
@@ -39,20 +40,24 @@ public class ValueModule : MonoBehaviour
 
     public void AddValue(bool positive)
     {
+        Debug.Log("Call to add value for " + m_valueName + " is pos " + positive);
         if (positive)
         {
-            m_value++;
+            m_value=Mathf.Min(++m_value,m_maxValue);
+            
         }
         else
         {
-            m_value= math.max(0,m_value--);
+            m_value= Mathf.Max(0,--m_value);
         }
         m_onValueChanged.Invoke(m_valueName, m_value);
+        UpdateDisplayValue();
     }
 
     public void UpdateDisplayValue()
     {
-        m_valueDisplay.text = m_value.ToString();
+        Debug.Log("Value Change for " + m_valueName + " = " + m_value);
+        m_valueDisplay.text = ""+m_value;
     }
 
 }
